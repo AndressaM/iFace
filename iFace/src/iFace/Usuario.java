@@ -9,20 +9,30 @@ public class  Usuario {
 	protected String nome;
 	protected String login; 
 	protected String senha;
+	protected String email;
 	protected ArrayList<Usuario> amigos =  new ArrayList<Usuario>();
 	protected Hashtable<String,String> soliticaoAmizades;
 	
 	
 	
-	public  Usuario (String nome, String login, String senha, ArrayList<Usuario> amigos ,Hashtable<String, String> soliticaoAmizades ){
+	public  Usuario (String nome,String email, String login, String senha, ArrayList<Usuario> amigos ,Hashtable<String, String> soliticaoAmizades ){
 		
 		this.nome = nome;
 		this.login = login;
+		this.email = email;
 		this.senha = senha; 
 		this.amigos = amigos;
 		this.soliticaoAmizades = soliticaoAmizades;
 		
 		
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Hashtable<String, String> getSoliticaoAmizades() {

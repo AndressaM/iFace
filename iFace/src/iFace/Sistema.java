@@ -9,6 +9,7 @@ public class Sistema {
 	String login;
 	String passaword;
 	String nome;
+	String email;
 	Scanner inn = new Scanner(System.in);//entrada
 	Hashtable<String, Usuario> usuarios = new Hashtable<String, Usuario>();
 	
@@ -57,17 +58,18 @@ public class Sistema {
 		System.out.println("Criando uma Conta - iFace");
 		System.out.println("Qual é seu nome?");
 		nome = inn.nextLine();
+		System.out.println("Qual é seu email ?");
+		email = inn.nextLine();
 		System.out.println("Qual login que deseja?");
 		login = inn.nextLine();
-		if(buscaUsuario(login)!= null){
-			while(buscaUsuario(login)!=null)
-				System.out.println("Esse login já existe , tente um novo.");
-			login = inn.nextLine();
-		}
+		do{
+			loginValido(login);
+		}while (loginValido(login)!= false);
+		
 		System.out.println("Entre com sua senha:");
 		passaword = inn.nextLine();
 		
-		usuarios.put(login ,new Usuario(nome,login,passaword,null,null));
+		usuarios.put(login ,new Usuario(nome,email,login,passaword,null,null));
 		System.out.println("Conta criada com sucesso!");
 		System.out.println(usuarios.get(login).toString());
 	
@@ -83,6 +85,27 @@ public class Sistema {
 		System.out.println(" ----iFace -----");
 		System.out.println("Bem Vindo "+ atual.getName());
 		
+	}
+	
+	public static boolean verificadorEmail(String email)
+    {
+        return email.matches("([A-Za-z0-9\\._-]+@[A-Za-z]+\\.[A-Za-z]+)") ;
+    }
+	
+	public void addUsuarioHash(Usuario atual){
+		
+		usuarios.put(atual.getLogin(), atual);
+		
+	}
+	public boolean loginValido(String login){
+		if(buscaUsuario(login)!= null){
+			System.out.println("Login existente, tente um novo:");
+			login = inn.nextLine();	
+			loginValido(login);
+			return false;
+			
+		}
+		else return true;
 	}
 	
 	
