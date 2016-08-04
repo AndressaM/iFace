@@ -10,6 +10,7 @@ import User.NoUser;
 import User.User;
 
 public class CentralSystem {
+	
 	Scanner cin = new Scanner(System.in);
 	HashMap<Integer, ArrayList<Message>> messages;
 	ArrayList<User> users;
@@ -23,8 +24,9 @@ public class CentralSystem {
 	}
 
 	public void openSession() {
+		
 		// TODO Auto-generated method stub
-		System.out.println("Username:");
+		
 		String username = cin.next();
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
@@ -32,7 +34,7 @@ public class CentralSystem {
 				if (user.getPassword().equals(pass)) {
 					currentSession = user;
 				}
-				return;
+			
 			}
 		}
 		System.out.println("Nao tem");
@@ -44,30 +46,23 @@ public class CentralSystem {
 		currentSession = null;
 	}
 
-	public void newUser() {
+	public void newUser(String name, String password,String username) {
 		// TODO Auto-generated method stub
-		// andressa faz
-		String name = cin.nextLine();
-		String password = cin.nextLine();
-		String username = cin.nextLine();
 		User user = new User(users.size(), name, password, username);
 		users.add(user);
 
 	}
 
-	public void removeUser() {
+	public void removeUser(Integer id){
 		// TODO Auto-generated method stub
-		Integer id = cin.nextInt();
 		NoUser user = (NoUser) users.get(id);
 		users.set(id, user);
-
 	}
 	
 
-	public void newCommunity() {
+	public void newCommunity(String name) {
 		// TODO Auto-generated method stub
 		if (currentSession != null) {
-			String name = cin.nextLine();
 			communities.add(new Community(name, currentSession.getId()));
 			return;
 		}
@@ -81,8 +76,13 @@ public class CentralSystem {
 		communities.set(id, community);
 
 	}
-	public void addUser(User user){
-		 users.add(user);
+	
+	public void addFriends(Integer id){
+		
 	}
 	
+	public void request(User user){
+		user.getRequest().add(user);
+	}
+		
 }

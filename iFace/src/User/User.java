@@ -9,6 +9,7 @@ public class User extends Agent {
 	Integer id;
 	String name;
 	String password;
+	String email;
 	String username;
 	ArrayList<User> friends;
 	ArrayList<User> request;
@@ -79,5 +80,15 @@ public class User extends Agent {
 	public void setLastRead(Integer lastRead) {
 		this.lastRead = lastRead;
 	}
+
+	public ArrayList<User> getRequest() {
+		return request;
+	}
+
+	public void setRequest(ArrayList<User> request) {
+		this.request = request;
+	}
+	
+	
 
 }
