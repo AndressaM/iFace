@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import Community.Community;
 import Community.NoCommunity;
 import User.NoUser;
 import User.User;
 
 public class CentralSystem {
-	
+
 	Scanner cin = new Scanner(System.in);
 	HashMap<Integer, ArrayList<Message>> messages;
 	ArrayList<User> users;
@@ -23,22 +25,22 @@ public class CentralSystem {
 		this.messages = new HashMap<>();
 	}
 
-	public void openSession() {
-		
+	public String openSession(String username) {
+
 		// TODO Auto-generated method stub
-		
-		String username = cin.next();
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
-				String pass = cin.next();
+				String pass = JOptionPane.showInputDialog("Senha: ");
+
 				if (user.getPassword().equals(pass)) {
 					currentSession = user;
-				}
-			
+					System.out.println(currentSession);
+					return "200";
+				} else
+					return ("001");
 			}
 		}
-		System.out.println("Nao tem");
-
+		return ("000");
 	}
 
 	public void closeSession() {
@@ -46,19 +48,19 @@ public class CentralSystem {
 		currentSession = null;
 	}
 
-	public void newUser(String name, String password,String username) {
+	public void newUser(String name, String password, String username) {
 		// TODO Auto-generated method stub
 		User user = new User(users.size(), name, password, username);
 		users.add(user);
+		messages.put(user.getId(), new ArrayList<>());
 
 	}
 
-	public void removeUser(Integer id){
+	public void removeUser(Integer id) {
 		// TODO Auto-generated method stub
 		NoUser user = (NoUser) users.get(id);
 		users.set(id, user);
 	}
-	
 
 	public void newCommunity(String name) {
 		// TODO Auto-generated method stub
@@ -76,13 +78,13 @@ public class CentralSystem {
 		communities.set(id, community);
 
 	}
-	
-	public void addFriends(Integer id){
-		
+
+	public void addFriends(Integer id) {
+		this.currentSession.getFriends().add(users.get(id));
 	}
-	
-	public void request(User user){
+
+	public void request(User user) {
 		user.getRequest().add(user);
 	}
-		
+
 }

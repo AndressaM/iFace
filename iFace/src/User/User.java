@@ -23,6 +23,9 @@ public class User extends Agent {
 		this.name = name;
 		this.password = password;
 		this.username = username;
+		this.friends = new ArrayList<>();
+		this.request = new ArrayList<>();
+		this.communities = new ArrayList<>();
 	}
 
 	public Integer getId() {
