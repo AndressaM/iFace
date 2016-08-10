@@ -8,15 +8,20 @@ import iFace.Agent;
 public class Community extends Agent {
 	private ArrayList<User> members;
 	protected String name;
-	protected String descrição;
+	protected String descricao;
 	protected Integer admin;
+	protected Integer id;
 
-	public Community(String name, Integer admin) {
+
+
+	public Community(Integer id ,String name,String descricao, Integer admin) {
 		super();
+		this.id = id;
+		this.descricao = descricao;
 		this.name = name;
 		this.admin = admin;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -26,13 +31,19 @@ public class Community extends Agent {
 	}
 
 	public String getDescrição() {
-		return descrição;
+		return descricao;
 	}
 
 	public void setDescrição(String descrição) {
-		this.descrição = descrição;
+		this.descricao = descrição;
+	}
+	public Integer getId() {
+		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Integer getAdmin() {
 		return admin;
 	}

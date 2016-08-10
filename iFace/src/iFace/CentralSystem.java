@@ -35,7 +35,7 @@ public class CentralSystem {
 				if (user.getPassword().equals(pass)) {
 					currentSession = user;
 					System.out.println(currentSession);
-					return "200";
+					return ("200");
 				} else
 					return ("001");
 			}
@@ -62,13 +62,13 @@ public class CentralSystem {
 		users.set(id, user);
 	}
 
-	public void newCommunity(String name) {
+	public void newCommunity(String name,String descricao) {
 		// TODO Auto-generated method stub
 		if (currentSession != null) {
-			communities.add(new Community(name, currentSession.getId()));
+			communities.add(new Community(communities.size(),name,descricao,currentSession.getId()));
 			return;
 		}
-		System.out.println("Faça login");
+		
 	}
 
 	public void removeCommunity() {

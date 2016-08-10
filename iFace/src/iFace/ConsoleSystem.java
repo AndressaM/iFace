@@ -5,7 +5,9 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
+import javax.swing.plaf.synth.SynthScrollBarUI;
 
+import Community.Community;
 import Singleton.Singleton;
 import User.NoUser;
 import User.User;
@@ -35,6 +37,7 @@ public class ConsoleSystem {
 				}
 				break;
 			case 2:
+				iNewUser();
 
 				break;
 
@@ -60,7 +63,7 @@ public class ConsoleSystem {
 		return false;
 	}
 	public boolean usernameExist(String username){
-		
+
 		ArrayList<User> aux = Singleton.getInstance().users;
 		for (User user : aux) {
 			if (user.getName().equals(username)){
@@ -68,27 +71,28 @@ public class ConsoleSystem {
 			}	
 		}
 		return false;
-		
+
 	}
 
 	public void iNewUser() {
+
 		System.out.println("---- Criando uma nova conta-------");
 		try {
 			String name = JOptionPane.showInputDialog("Nome: ");
 			String username = JOptionPane.showInputDialog("Username: ");
-			while(usernameExist(username)==true){
-				
+			while(usernameExist(username)==true){		
 				System.out.println("Username já existe!\n Tente outro");
-				username = JOptionPane.showInputDialog("Username: ");
-				
+				username = JOptionPane.showInputDialog("Username: ");				
 			}
 			String password = JOptionPane.showInputDialog("Senha: ");
 			Singleton.getInstance().newUser(name, password, username);
+			System.out.println("Usuario criado com sucesso!");
+			secondMenu();
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("Dados invalidos");
 		}
-		
+
 	}
 
 	public void requisitarAmigo() {
@@ -193,7 +197,7 @@ public class ConsoleSystem {
 					op = cin.nextInt();
 					System.out.println("Menssagem: "+recebe.get(op).message);
 					secondMenu();
-					
+
 				} catch (Exception e) {
 					// TODO: handle exception
 					System.out.println("Não existe Menssagem!");
@@ -208,15 +212,110 @@ public class ConsoleSystem {
 	}
 	public void gerenciarComunidade(){
 
-		Integer op;
+		String op;
+		Integer op1;
 
 		System.out.println("------Comunidade-----");
 		System.out.println("1-Criar nova comunidade");
 		System.out.println("2-Gerenciar minhas comunidades");
 
+		op = cin.nextLine();
+		switch (Integer.parseInt(op)) {
+		case 1:
+			String nome = JOptionPane.showInputDialog("Nome da comunidade ");
+			String descricao = JOptionPane.showInputDialog("Descricao ");
+			Singleton.getInstance().newCommunity(nome, descricao);
+			System.out.println("Comunidade Criada");
+			secondMenu();			
+			break;
+		case 2:
+			ArrayList<Community> aux = Singleton.getInstance().currentSession.getCommunities();
+			for (Community community : aux) {
+				System.out.println("Id: " + community.getId() + " Name: " + community.getName());
+			}
+			System.out.println("Qual comunidade que  deseja gerenciar?");
+			op1 = cin.nextInt();
+			System.out.println("Comunidade: " + Singleton.getInstance().currentSession.getCommunities().get(op1).getName());
+			System.out.println("1-Adicionar Membro");
+			System.out.println("2-Remover membro");
+			System.out.println("3-Enviar Menssagem");
+			if(op1 == 1){
+				addMembrosComunidade(Singleton.getInstance().currentSession.getCommunities().get(op1));
+			}
+			else if(op1 == 2){
+				removerMembroComunidade(Singleton.getInstance().currentSession.getCommunities().get(op1));
+			}
+			else if (op1 == 3){
+				System.out.println("Qual o corpo da menssagem:");
+				String corpo = cin.nextLine();
+				Message message = new Message(Singleton.getInstance().currentSession,Singleton.getInstance().currentSession.getCommunities().get(op1), corpo);
+				message.send();
+			}
+			else{
+				System.out.println("Entrada Invalida!");
+			}
+			secondMenu();
+			break;
+		
+		}
+
 
 	}
-
+	public void removerMembroComunidade(Community community){
+		Integer member;
+		ArrayList<User> aux = community.getMembers();
+		System.out.println(aux.size());
+		for (User user : aux) {
+			if (!Singleton.getInstance().currentSession.equals(user)|| !(user instanceof NoUser))
+				System.out.println("id: " + user.getId() + " Name: " + user.getName());
+		}
+		System.out.println("Qual membro deseja remover? Escreva o ID");
+		member = cin.nextInt();
+		community.getMembers().remove(member);
+		System.out.println("Membro retirado da comunidade!");
+		
+	}
+	public void addMembrosComunidade(Community community){
+		Integer member;
+		ArrayList<User> aux = Singleton.getInstance().users;
+		System.out.println(aux.size());
+		for (User user : aux) {
+			if (!Singleton.getInstance().currentSession.equals(user)|| !(user instanceof NoUser))
+				System.out.println("id: " + user.getId() + " Name: " + user.getName());
+		}
+		System.out.println("Qual membro deseja add? Escreva o ID");
+		member = cin.nextInt();
+		community.getMembers().add(Singleton.getInstance().users.get(member));
+		System.out.println("Membro adicionado a comunidade!");
+		
+		
+	}
+	public void deletarConta(){
+		System.out.println("Você realmente deseja deletar est conta?");
+		System.out.println("Sim(1) ou Não(0)");
+		Integer op1 = cin.nextInt();
+		if(op1 == 1){
+			System.out.println("aqui");
+			Singleton.getInstance().removeUser(Singleton.getInstance().currentSession.getId());
+			System.out.println("Conta deletada!");
+			iMenu();
+		}
+		else if (op1 == 0){
+			secondMenu();
+		}
+	}
+	public String informacaoesUser(){
+		
+		return "oka";
+	}
+	public void editarPerfil(){
+		System.out.println("Edição do Perfil");
+		System.out.println("1-Nome");
+		System.out.println("2-Email");
+		System.out.println("3-Idade");
+		System.out.println("4-");
+	}
+	
 	public void secondMenu() {
 
 		System.out.println("--------------Bem Vindo ao iFACE--------------");
@@ -232,10 +331,10 @@ public class ConsoleSystem {
 
 		try {
 			op = cin.nextLine();
-			
+
 			switch (Integer.parseInt(op)) {
 			case 1:
-
+				//falta editar perfil
 				break;
 			case 2:
 				requisitarAmigo();
@@ -248,14 +347,17 @@ public class ConsoleSystem {
 				gerenciarMenssagens();
 				break;
 			case 5:
-
+				gerenciarComunidade();
 				break;
 			case 6:
-
+				informacaoesUser();
 				break;
 			case 7:
 				System.out.println("Até mais!");
 				iMenu();
+				break;
+			case 8:
+				deletarConta();
 				break;
 			}
 		} catch (Exception e) {
