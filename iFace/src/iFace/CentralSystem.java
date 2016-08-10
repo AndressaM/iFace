@@ -34,7 +34,7 @@ public class CentralSystem {
 
 				if (user.getPassword().equals(pass)) {
 					currentSession = user;
-					System.out.println(currentSession);
+//					System.out.println(currentSession);
 					return ("200");
 				} else
 					return ("001");

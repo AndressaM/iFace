@@ -11,6 +11,8 @@ public class User extends Agent {
 	String password;
 	String email;
 	String username;
+	String idade;
+	
 	ArrayList<User> friends;
 	ArrayList<User> request;
 	ArrayList<Community> communities;
@@ -26,6 +28,22 @@ public class User extends Agent {
 		this.friends = new ArrayList<>();
 		this.request = new ArrayList<>();
 		this.communities = new ArrayList<>();
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getIdade() {
+		return idade;
+	}
+
+	public void setIdade(String idade) {
+		this.idade = idade;
 	}
 
 	public Integer getId() {
@@ -91,6 +109,14 @@ public class User extends Agent {
 	public void setRequest(ArrayList<User> request) {
 		this.request = request;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", username="
+				+ username + ", idade=" + idade + ", friends=" + friends + ", request=" + request + ", communities="
+				+ communities + "]";
+	}
+	
 	
 	
 

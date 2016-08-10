@@ -6,7 +6,7 @@ import User.User;
 import iFace.Agent;
 
 public class Community extends Agent {
-	private ArrayList<User> members;
+	private ArrayList<User> members = new ArrayList<User>();
 	protected String name;
 	protected String descricao;
 	protected Integer admin;
