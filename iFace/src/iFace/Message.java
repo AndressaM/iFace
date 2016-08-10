@@ -17,15 +17,16 @@ public class Message {
 	}
 
 	public void send() {
-		if (sender instanceof User) {
-			User agent = (User) sender;
-			Singleton.getInstance().messages.get(agent.getId());
-		} else if (sender instanceof Community) {
-			Community community = (Community) sender;
-			for (User agent : community.getMembers()) {
-				Singleton.getInstance().messages.get(agent.getId());
-			}
-		}
-	}
+        if (dist instanceof User) {
+            User agent = (User) dist;
+            Singleton.getInstance().messages.get(agent.getId()).add(this);
+            System.out.println("MESSAGEM ENVIADA COM SUCESSO");
+        } else if (dist instanceof Community) {
+            Community community = (Community) sender;
+            for (User agent : community.getMembers()) {
+                Singleton.getInstance().messages.get(agent.getId()).add(this);
+            }
+        }
+    }
 
 }
