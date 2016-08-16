@@ -50,28 +50,42 @@ public class ConsoleSystem {
 
 	public boolean iLogin() {
 		String username = JOptionPane.showInputDialog("Username:");
-		if (Singleton.getInstance().openSession(username).equals("200")) {
+		String usernameretorno = Singleton.getInstance().openSession(username);
+		if (usernameretorno.equals("200")) {
 			System.out.println("Login efetuado.");
 			return true;
-		} else if (Singleton.getInstance().openSession(username).equals("000")) {
+		} else if (usernameretorno.equals("000")) {
 			System.out.println("Conta não existe");
-		} else if (Singleton.getInstance().openSession(username).equals("001")) {
+		} else if (usernameretorno.equals("001")) {
+			
 			System.out.println("Senha invalida");
 		}
 		return false;
 	}
+	public boolean verificPassword(String password){
+		ArrayList<User> aux = Singleton.getInstance().users;
 
+		for (User user : aux) {
+			if (user.getPassword().equals(password)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean usernameExist(String username) {
 
 		ArrayList<User> aux = Singleton.getInstance().users;
+
 		for (User user : aux) {
-			if (user.getName().equals(username)) {
+			if (user.getUsername().equals(username)) {
 				return true;
 			}
 		}
 		return false;
 
 	}
+
 
 	public void iNewUser() {
 
@@ -328,19 +342,19 @@ public class ConsoleSystem {
 		Integer op1 = cin.nextInt();
 		switch (op1) {
 		case 1:
-			
+
 			nome = JOptionPane.showInputDialog("Nome: ");
 			Singleton.getInstance().currentSession.setName(nome);
 			secondMenu();
 			break;
 		case 2:
-			
+
 			email = JOptionPane.showInputDialog("Email: ");
 			Singleton.getInstance().currentSession.setName(email);
 			secondMenu();
 			break;
 		case 3:
-			
+
 			idade = JOptionPane.showInputDialog("Idade ");;
 			Singleton.getInstance().currentSession.setIdade(idade);
 			secondMenu();

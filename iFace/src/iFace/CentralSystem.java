@@ -30,13 +30,14 @@ public class CentralSystem {
 		// TODO Auto-generated method stub
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
+				
 				String pass = JOptionPane.showInputDialog("Senha: ");
-
+				
 				if (user.getPassword().equals(pass)) {
 					currentSession = user;
-//					System.out.println(currentSession);
 					return ("200");
 				} else
+					System.out.println("senha invalida opS()");
 					return ("001");
 			}
 		}
