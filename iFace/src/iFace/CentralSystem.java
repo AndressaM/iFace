@@ -29,7 +29,7 @@ public class CentralSystem {
 
 		// TODO Auto-generated method stub
 		for (User user : users) {
-			if (user.getUsername().equals(username)) {
+			if (user.getUsername().equals(username) && !(user instanceof NoUser) ) {
 				
 				String pass = JOptionPane.showInputDialog("Senha: ");
 				
@@ -58,8 +58,8 @@ public class CentralSystem {
 
 	public void removeUser(Integer id) {
 		// TODO Auto-generated method stub
-		
-		NoUser user = (NoUser) users.get(id);
+		System.out.println("aquii");
+		NoUser user = new NoUser(id, users.get(id).getName(), users.get(id).getPassword(), users.get(id).getUsername());
 		users.set(id, user);
 	}
 

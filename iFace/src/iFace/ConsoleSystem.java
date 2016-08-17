@@ -56,7 +56,9 @@ public class ConsoleSystem {
 			System.out.println("Login efetuado.");
 			return true;
 		} else if (usernameretorno.equals("000")) {
-			System.out.println("Conta não existe");
+			System.out.println("Username não existe");
+			System.out.println("Tente Novamente!");
+			iMenu();
 		} else if (usernameretorno.equals("001")) {
 
 			System.out.println("Senha invalida");
@@ -115,7 +117,7 @@ public class ConsoleSystem {
 		ArrayList<User> aux = Singleton.getInstance().users;
 		System.out.println(aux.size());
 		for (User user : aux) {
-			if (!Singleton.getInstance().currentSession.equals(user) || user instanceof NoUser)
+			if (!Singleton.getInstance().currentSession.equals(user) && !( user instanceof NoUser)&& !Singleton.getInstance().currentSession.getFriends().contains(user))
 				System.out.println("id: " + user.getId() + " Name: " + user.getName());
 		}
 		while (true) {
@@ -176,18 +178,19 @@ public class ConsoleSystem {
 
 	public void gerenciarMenssagens() {
 		System.out.println("--------Menssagens-----");
-		Integer friend, op;
+		Integer friend, op1;
+		String op;
 		System.out.println("1-Enviar Menssagen");
 		System.out.println("2-Ler Menssagen");
 		if(Singleton.getInstance().currentSession.getFriends().size()!=0){
-			op = Singleton.getInstance().cin.nextInt();
-			switch (op) {
+			op1 = Singleton.getInstance().cin.nextInt();
+			switch (op1) {
 			case 1:
 				System.out.println("Deseja enviar para qual amigo?");
 				ArrayList<User> aux = Singleton.getInstance().currentSession.getFriends();
 
 				for (User user : aux) {
-					if (!Singleton.getInstance().currentSession.equals(user) || !(user instanceof NoUser))
+					if (!Singleton.getInstance().currentSession.equals(user) && !(user instanceof NoUser))
 						System.out.println("id: " + user.getId() + " Name: " + user.getName());
 				}
 				friend = Singleton.getInstance().cin.nextInt();
@@ -213,8 +216,8 @@ public class ConsoleSystem {
 						}
 
 						System.out.println("Qual messagen deseja ler? Informe o Id da menssagem");
-						op = cin.nextInt();
-						System.out.println("Menssagem: " + recebe.get(op).message);
+						op = cin.nextLine();
+						System.out.println("Menssagem: " + recebe.get(Integer.parseInt(op)).message);
 						secondMenu();
 
 
@@ -308,7 +311,7 @@ public class ConsoleSystem {
 		ArrayList<User> aux = community.getMembers();
 		System.out.println(aux.size());
 		for (User user : aux) {
-			if (!Singleton.getInstance().currentSession.equals(user) || !(user instanceof NoUser))
+			if (!Singleton.getInstance().currentSession.equals(user) && !(user instanceof NoUser))
 				System.out.println("id: " + user.getId() + " Name: " + user.getName());
 		}
 		System.out.println("Qual membro deseja remover? Escreva o ID");
@@ -324,7 +327,7 @@ public class ConsoleSystem {
 		ArrayList<User> aux = Singleton.getInstance().users;
 		System.out.println(aux.size());
 		for (User user : aux) {
-			if (!Singleton.getInstance().currentSession.equals(user) || !(user instanceof NoUser))
+			if (!Singleton.getInstance().currentSession.equals(user) && !(user instanceof NoUser))
 				System.out.println("id: " + user.getId() + " Name: " + user.getName());
 		}
 		System.out.println("Qual membro deseja add? Escreva o ID");
@@ -342,6 +345,7 @@ public class ConsoleSystem {
 		switch (Integer.parseInt(op1)) {
 		case 1:
 			System.out.println("aqui");
+			
 			Singleton.getInstance().removeUser(Singleton.getInstance().currentSession.getId());
 			System.out.println("Conta deletada!");
 			iMenu();
