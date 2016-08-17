@@ -1,6 +1,7 @@
 package iFace;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -57,7 +58,7 @@ public class ConsoleSystem {
 		} else if (usernameretorno.equals("000")) {
 			System.out.println("Conta não existe");
 		} else if (usernameretorno.equals("001")) {
-			
+
 			System.out.println("Senha invalida");
 		}
 		return false;
@@ -72,7 +73,7 @@ public class ConsoleSystem {
 		}
 		return false;
 	}
-	
+
 	public boolean usernameExist(String username) {
 
 		ArrayList<User> aux = Singleton.getInstance().users;
@@ -178,52 +179,58 @@ public class ConsoleSystem {
 		Integer friend, op;
 		System.out.println("1-Enviar Menssagen");
 		System.out.println("2-Ler Menssagen");
-		op = Singleton.getInstance().cin.nextInt();
-		switch (op) {
-		case 1:
-			System.out.println("Deseja enviar para qual amigo?");
-			ArrayList<User> aux = Singleton.getInstance().currentSession.getFriends();
+		if(Singleton.getInstance().currentSession.getFriends().size()!=0){
+			op = Singleton.getInstance().cin.nextInt();
+			switch (op) {
+			case 1:
+				System.out.println("Deseja enviar para qual amigo?");
+				ArrayList<User> aux = Singleton.getInstance().currentSession.getFriends();
 
-			for (User user : aux) {
-				if (!Singleton.getInstance().currentSession.equals(user) || !(user instanceof NoUser))
-					System.out.println("id: " + user.getId() + " Name: " + user.getName());
-			}
-			friend = Singleton.getInstance().cin.nextInt();
-			System.out.println("Qual o corpo da menssagem:");
-			String corpo = cin.nextLine();
-			Message message = new Message(Singleton.getInstance().currentSession,
-					Singleton.getInstance().users.get(friend), corpo);
-			message.send();
-			secondMenu();
-			break;
-		case 2:
-
-			ArrayList<Message> recebe = Singleton.getInstance().messages
-			.get(Singleton.getInstance().currentSession.getId());
-			System.out.println(
-					Singleton.getInstance().currentSession.getName() + "você tem " + recebe.size() + " menssagens!");
-			if (recebe.size() != 0) {
-				try {
-
-					for (int i = 0; i < recebe.size(); ++i) {
-						Message msg = recebe.get(i);
-						System.out.println("ID: " + i + " Nome:" + ((User) msg.sender).getName());
-					}
-
-					System.out.println("Qual messagen deseja ler? Informe o Id da menssagem");
-					op = cin.nextInt();
-					System.out.println("Menssagem: " + recebe.get(op).message);
-					secondMenu();
-
-
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("Não existe Menssagem!");
-					secondMenu();
+				for (User user : aux) {
+					if (!Singleton.getInstance().currentSession.equals(user) || !(user instanceof NoUser))
+						System.out.println("id: " + user.getId() + " Name: " + user.getName());
 				}
-			} 
-			break;
+				friend = Singleton.getInstance().cin.nextInt();
+				System.out.println("Qual o corpo da menssagem:");
+				String corpo = cin.nextLine();
+				Message message = new Message(Singleton.getInstance().currentSession,
+						Singleton.getInstance().users.get(friend), corpo);
+				message.send();
+				secondMenu();
+				break;
+			case 2:
 
+				ArrayList<Message> recebe = Singleton.getInstance().messages
+				.get(Singleton.getInstance().currentSession.getId());
+				System.out.println(
+						Singleton.getInstance().currentSession.getName() + "você tem " + recebe.size() + " menssagens!");
+				if (recebe.size() != 0) {
+					try {
+
+						for (int i = 0; i < recebe.size(); ++i) {
+							Message msg = recebe.get(i);
+							System.out.println("ID: " + i + " Nome:" + ((User) msg.sender).getName());
+						}
+
+						System.out.println("Qual messagen deseja ler? Informe o Id da menssagem");
+						op = cin.nextInt();
+						System.out.println("Menssagem: " + recebe.get(op).message);
+						secondMenu();
+
+
+					} catch (Exception e) {
+						// TODO: handle exception
+						System.out.println("Não existe Menssagem!");
+						secondMenu();
+					}
+				} 
+				break;
+
+			}
+		}
+		else {
+			System.out.println("Você não tem amigos ainda!");
+			secondMenu();
 		}
 
 	}
@@ -232,6 +239,7 @@ public class ConsoleSystem {
 
 		String op;
 		Integer op1;
+		String idCommunity;
 
 		System.out.println("------Comunidade-----");
 		System.out.println("1-Criar nova comunidade");
@@ -243,43 +251,60 @@ public class ConsoleSystem {
 			String nome = JOptionPane.showInputDialog("Nome da comunidade ");
 			String descricao = JOptionPane.showInputDialog("Descricao ");
 			Singleton.getInstance().newCommunity(nome, descricao);
+
 			System.out.println("Comunidade Criada");
 			secondMenu();
 			break;
 		case 2:
 			ArrayList<Community> aux = Singleton.getInstance().currentSession.getCommunities();
+			System.out.println("Qual comunidade que  deseja gerenciar?");
+			//System.out.println("tamanhi"+aux.size());
 			for (Community community : aux) {
 				System.out.println("Id: " + community.getId() + " Name: " + community.getName());
 			}
-			System.out.println("Qual comunidade que  deseja gerenciar?");
-			op1 = cin.nextInt();
+			idCommunity = cin.nextLine();
 			System.out.println(
-					"Comunidade: " + Singleton.getInstance().currentSession.getCommunities().get(op1).getName());
+					"Comunidade: " + Singleton.getInstance().currentSession.getCommunities().get(Integer.parseInt(idCommunity)).getName());
 			System.out.println("1-Adicionar Membro");
 			System.out.println("2-Remover membro");
 			System.out.println("3-Enviar Menssagem");
-			if (op1 == 1) {
-				addMembrosComunidade(Singleton.getInstance().currentSession.getCommunities().get(op1));
-			} else if (op1 == 2) {
-				removerMembroComunidade(Singleton.getInstance().currentSession.getCommunities().get(op1));
-			} else if (op1 == 3) {
-				System.out.println("Qual o corpo da menssagem:");
-				String corpo = cin.nextLine();
-				Message message = new Message(Singleton.getInstance().currentSession,
-						Singleton.getInstance().currentSession.getCommunities().get(op1), corpo);
-				message.send();
-			} else {
-				System.out.println("Entrada Invalida!");
-			}
-			secondMenu();
-			break;
+			op = cin.nextLine();
+			try{
+				switch (Integer.parseInt(op)) {
+				case 1:
 
+					addMembrosComunidade(aux.get(Integer.parseInt(idCommunity)));
+					secondMenu();
+					break;
+				case 2:
+					removerMembroComunidade(Singleton.getInstance().currentSession.getCommunities().get(Integer.parseInt(idCommunity)));
+					secondMenu();
+					break;
+				case 3:
+					System.out.println("Qual o corpo da menssagem:");
+					String corpo = cin.nextLine();
+					Message message = new Message(Singleton.getInstance().currentSession,
+							Singleton.getInstance().currentSession.getCommunities().get(Integer.parseInt(idCommunity)), corpo);
+					message.send();
+					secondMenu();
+					break;
+
+				}
+
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("Entrada Invalida");
+				secondMenu();
+			}
 		}
 
 	}
 
+
+
 	public void removerMembroComunidade(Community community) {
-		Integer member;
+		String member;
 		ArrayList<User> aux = community.getMembers();
 		System.out.println(aux.size());
 		for (User user : aux) {
@@ -287,14 +312,15 @@ public class ConsoleSystem {
 				System.out.println("id: " + user.getId() + " Name: " + user.getName());
 		}
 		System.out.println("Qual membro deseja remover? Escreva o ID");
-		member = cin.nextInt();
-		community.getMembers().remove(member);
+		member = cin.nextLine();
+		community.getMembers().remove(Integer.parseInt(member));
 		System.out.println("Membro retirado da comunidade!");
 
 	}
 
 	public void addMembrosComunidade(Community community) {
-		Integer member;
+	
+		String member;
 		ArrayList<User> aux = Singleton.getInstance().users;
 		System.out.println(aux.size());
 		for (User user : aux) {
@@ -302,24 +328,31 @@ public class ConsoleSystem {
 				System.out.println("id: " + user.getId() + " Name: " + user.getName());
 		}
 		System.out.println("Qual membro deseja add? Escreva o ID");
-		member = cin.nextInt();
-		community.getMembers().add(Singleton.getInstance().users.get(member));
+		member = cin.nextLine();
+		community.getMembers().add(Singleton.getInstance().users.get(Integer.parseInt(member)));
 		System.out.println("Membro adicionado a comunidade!");
 
 	}
 
 	public void deletarConta() {
+		String op1;
 		System.out.println("Você realmente deseja deletar est conta?");
-		System.out.println("Sim(1) ou Não(0)");
-		Integer op1 = cin.nextInt();
-		if (op1 == 1) {
+		System.out.println("Sim(1) ou Não(2)");
+		op1 = cin.nextLine();
+		switch (Integer.parseInt(op1)) {
+		case 1:
 			System.out.println("aqui");
 			Singleton.getInstance().removeUser(Singleton.getInstance().currentSession.getId());
 			System.out.println("Conta deletada!");
 			iMenu();
-		} else {
+			break;
+
+		case 2:
+			System.out.println("Ficamos feliz por tê-lo aqui!");
 			secondMenu();
+			break;
 		}
+		
 	}
 
 	public String informacaoesUser() {
@@ -339,8 +372,8 @@ public class ConsoleSystem {
 		System.out.println("3-Idade");
 		System.out.println("O que quer mudar?");
 
-		Integer op1 = cin.nextInt();
-		switch (op1) {
+		String op1 = cin.nextLine();
+		switch (Integer.parseInt(op1)) {
 		case 1:
 
 			nome = JOptionPane.showInputDialog("Nome: ");

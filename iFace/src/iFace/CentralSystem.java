@@ -37,7 +37,6 @@ public class CentralSystem {
 					currentSession = user;
 					return ("200");
 				} else
-					System.out.println("senha invalida opS()");
 					return ("001");
 			}
 		}
@@ -59,6 +58,7 @@ public class CentralSystem {
 
 	public void removeUser(Integer id) {
 		// TODO Auto-generated method stub
+		
 		NoUser user = (NoUser) users.get(id);
 		users.set(id, user);
 	}
@@ -66,15 +66,15 @@ public class CentralSystem {
 	public void newCommunity(String name,String descricao) {
 		// TODO Auto-generated method stub
 		if (currentSession != null) {
-			communities.add(new Community(communities.size(),name,descricao,currentSession.getId()));
+			this.currentSession.getCommunities().add(new Community(communities.size(),name,descricao,currentSession.getId()));
 			return;
 		}
 		
 	}
 
-	public void removeCommunity() {
+	public void removeCommunity(Integer id) {
 		// TODO Auto-generated method stub
-		Integer id = cin.nextInt();
+		
 		NoCommunity community = (NoCommunity) communities.get(id);
 		communities.set(id, community);
 
